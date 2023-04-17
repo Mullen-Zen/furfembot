@@ -9,6 +9,7 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageTyping,
     GatewayIntentBits.MessageContent,
   ]
 });
@@ -120,5 +121,10 @@ client.on('messageCreate', (message) => {
     }
   }
 })
+
+// Now it knows when someone's typing
+client.on('typingStart', (typing) => {
+  console.log(typing.user.toString())
+});
 
 client.login(token);
