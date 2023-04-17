@@ -1,6 +1,11 @@
 # Hello, Discord!
 
-This is an ongoing practice project for me to teach myself the workings of NodeJS with respect to coding a discord bot. Right now, the features are limited solely to GPT-3 text prompt responses. Based on the code found from [this](https://betterprogramming.pub/add-an-ai-to-your-discord-server-with-node-js-and-gpt-3-198b538cc05b) tutorial, but since adapted for discord.js V14.9.0. I'm continuously adding to it as I screw with different features. Figured I'd make it public so that people would be able to see what I'm working on :3
+This is an ongoing practice project for me to teach myself the workings of NodeJS with respect to coding a discord bot. Features are listed below. I've also elected to add some *small* features to give the bot the personality of a furry femboy, because I think it's fun and I was bored. Based on the code found from [this](https://betterprogramming.pub/add-an-ai-to-your-discord-server-with-node-js-and-gpt-3-198b538cc05b) tutorial, but since adapted for discord.js V14.9.0. I'm continuously adding to it as I screw with different features. Figured I'd make it public so that people would be able to see what I'm working on :3
+
+## Features
+
+- Users can send prompts to a Davinci-003 AI Chatbot and receive answers, without leaving discord
+- The bot will detect the use of the words "men," "man," "furry," and "femboy" and respond in funny ways from a set list of responses
 
 ## Setup for Development (requires Node.js/NPM)
 
@@ -27,6 +32,12 @@ cat > .env
 ```{.sh}
 TOKEN='[INSERT_DISCORD_TOKEN_HERE]'
 KEY='[INSERT_OPENAI_APIKEY_HERE]'
+```
+
+- Also add a line as follows, but with a really funny copypasta that you want to chance triggering if a user in the server uses the word "furry"
+
+```{.sh}
+COPYPASTA='[INSERT_COPYPASTA_HERE]'
 ```
 
 ## Activation and Use
