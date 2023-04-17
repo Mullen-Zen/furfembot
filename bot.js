@@ -53,9 +53,9 @@ client.on('messageCreate', (message) => {
         default:
     }
     console.log("Response sent!");
-  } else if ((message.content.toLowerCase().includes('femboy')) && (message.author.id !== client.user.id)) {
+  } else if ((message.content.toLowerCase().includes('femboy') || message.content.toLowerCase().includes('bussy')) && (message.author.id !== client.user.id)) {
     console.log("Femboy message detected. Responding with something sus now...")
-    const responseCode = getRandomInt(0, 4);
+    const responseCode = getRandomInt(0, 6);
     switch(responseCode) {
       case(0):
         message.channel.send(message.author.toString() + " is a total bottom, btw");
@@ -69,6 +69,11 @@ client.on('messageCreate', (message) => {
       case(3):
         message.channel.send("??");
         break;
+      case(4):
+        message.channel.send(message.author.toString() + " wasn't lying tho that bussy can SQUIRT");
+        break;
+      case(5):
+        message.channel.send("I'm a certified bussy enjoyer and " + message.author.toString() + " can confirm it")
       default:
     }
     console.log("Response sent!");
@@ -124,7 +129,7 @@ client.on('messageCreate', (message) => {
 
 // Now it knows when someone's typing
 client.on('typingStart', (typing) => {
-  console.log(typing.user.toString())
+  console.log("Someone is typing");
 });
 
 client.login(token);
