@@ -10,9 +10,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discord-player/extractor": "^4.2.0",
+    "@discordjs/builders": "^1.6.1",
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/rest": "^1.7.0",
+    "@discordjs/voice": "^0.16.0",
+    "@distube/ytdl-core": "^4.11.8",
+    "discord-api-types": "^0.37.39",
+    "discord-player": "^6.2.0",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
+    "ffmpeg-static": "^5.1.0",
     "mathjs": "^11.8.0",
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "opusscript": "^0.0.8",
+    "play-dl": "^1.9.6",
+    "ytdl-core": "^4.11.4"
   }
 }

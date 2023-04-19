@@ -4,13 +4,19 @@ require('dotenv').config();
 const { ask } = require("./ai.js"); // Import "ask" function from the ai.js file
 const token = (process.env.TOKEN);
 const copypasta = (process.env.COPYPASTA);
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const {REST} = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v10")
+const { Player } = require("discord-player");
+const fs = require("node:fs");
+const path = require("node:path");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMessageTyping,
     GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
   ]
 });
 const getRandomInt = (min, max) => {
@@ -22,9 +28,51 @@ const affirmatives = [
   "no cap",
   "bussin",
 ]
+const commands = [];
+client.commands = new Collection();
+
+const commandsPath = path.join(__dirname, "commands");
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
+
+for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+  const command = require(filePath);
+
+  client.commands.set(command.data.name, command);
+  commands.push(command.data.toJSON());
+}
+
+client.player = new Player(client, {
+  ytdlOptions: {
+    quality: "highestaudio",
+    highWaterMark: 1 << 25
+  }
+})
 
 client.on('ready', () => {
   console.log("The AI bot is online"); // Message when bot is online
+  const guild_ids = client.guilds.cache.map(guild => guild.id);
+
+  const rest = new REST({version: "10"}).setToken(process.env.TOKEN);
+  for (const guildId of guild_ids) {
+    rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), {
+      body: commands
+    })
+    .then(() => console.log("Added commands to " + guildId))
+    .catch(console.error);
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isCommand()) return;
+  const command = client.commands.get(interaction.commandName);
+  if (!command) return;
+  try {
+    await command.execute({client, interaction});
+  } catch (e) {
+    console.error(e);
+    await interaction.reply("An error occured while executing that command.");
+  }
 });
 
 // AI Prompting
@@ -105,23 +153,25 @@ client.on('messageCreate', (message) => {
 
 // fr fr ong bro
 client.on('messageCreate', (message) => {
-  for (let i = 0; i < affirmatives.length; i++) {
-    if ((message.content.toLowerCase().includes(affirmatives[i])) && (message.author.id !== client.user.id)) {
-      const responseCode = getRandomInt(0, 4);
-      switch(responseCode) {
-        case(0):
-          message.channel.send("no cap fr man");
-          break;
-        case(1):
-          message.channel.send("you right tho");
-          break;
-        case(2):
-          message.channel.send("fr fr");
-          break;
-        case(3):
-          message.channel.send("ong bro");
-          break;
-        default:
+  if (message.author.id !== client.user.id) {
+    for (let i = 0; i < affirmatives.length; i++) {
+      if (message.content.toLowerCase().includes(affirmatives[i])) {
+        const responseCode = getRandomInt(0, 4);
+        switch(responseCode) {
+          case(0):
+            message.channel.send("no cap fr man");
+            break;
+          case(1):
+            message.channel.send("you right tho");
+            break;
+          case(2):
+            message.channel.send("fr fr");
+            break;
+          case(3):
+            message.channel.send("ong bro");
+            break;
+          default:
+        }
       }
     }
   }
