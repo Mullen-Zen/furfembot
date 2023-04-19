@@ -1,15 +1,18 @@
 // In bot.js
 require('dotenv').config();
 
-const { ask } = require("./ai.js"); // Import "ask" function from the ai.js file
-const token = (process.env.TOKEN);
-const copypasta = (process.env.COPYPASTA);
+const { ask } = require("./ai.js");
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const {REST} = require("@discordjs/rest");
-const { Routes } = require("discord-api-types/v10")
 const { Player } = require("discord-player");
-const fs = require("node:fs");
-const path = require("node:path");
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v10")
+
+const affirmatives = [
+  "ong",
+  "fr",
+  "no cap",
+  "bussin",
+]
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -19,21 +22,20 @@ const client = new Client({
     GatewayIntentBits.GuildVoiceStates,
   ]
 });
+const commands = [];
+const copypasta = (process.env.COPYPASTA);
+const fs = require("node:fs");
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-const affirmatives = [
-  "ong",
-  "fr",
-  "no cap",
-  "bussin",
-]
-const commands = [];
-client.commands = new Collection();
-
+const path = require("node:path");
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
+const personalityFilter = (process.env.PERSONALITY_FILTER);
+const token = (process.env.TOKEN);
 
+// Linking commands for the music bot to the main bot client
+client.commands = new Collection();
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
   const command = require(filePath);
@@ -42,6 +44,7 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
+// Initializing music player
 client.player = new Player(client, {
   ytdlOptions: {
     quality: "highestaudio",
@@ -49,8 +52,9 @@ client.player = new Player(client, {
   }
 })
 
+// Bot initialization/"going online"
 client.on('ready', () => {
-  console.log("The AI bot is online"); // Message when bot is online
+  console.log("The AI bot is online");
   const guild_ids = client.guilds.cache.map(guild => guild.id);
 
   const rest = new REST({version: "10"}).setToken(process.env.TOKEN);
@@ -58,11 +62,12 @@ client.on('ready', () => {
     rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), {
       body: commands
     })
-    .then(() => console.log("Added commands to " + guildId))
+    .then(() => console.log("Added commands to guild (ID: " + guildId + ")."))
     .catch(console.error);
   }
 });
 
+// Music player command handling
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) return;
   const command = client.commands.get(interaction.commandName);
@@ -77,12 +82,21 @@ client.on('interactionCreate', async interaction => {
 
 // AI Prompting
 client.on('messageCreate', async (message) => {
-  if (message.content.substring(0, 1) === '!') {
-    console.log("Bot-directed message detected:\n" + message.author.toString() + " prompted " + String(message.content.substring(1)) + ".\nResponding now...");
-    const prompt = message.content.substring(1); // Remove the exclamation mark from the message
-    const answer = await ask(prompt); // Prompt the robot
-    message.channel.send(answer); // Reply to the message with the generated response
-    console.log("Response sent!");
+  if (message.author.id !== client.user.id) {
+    try {
+      let mention = message.mentions.users.first().bot === true;
+      if (mention) {
+        console.log("yay");
+        console.log("Bot-directed message detected:\n" + message.author.toString() + " prompted " + String(message.content.substring(23)) + ".\nResponding now...");
+        const prompt = message.content.substring(23); // Remove the ping from the message
+        const answer = await ask(personalityFilter + prompt); // Prompt the robot, pass through personality filter
+        console.log(answer);
+        message.channel.send(answer); // Reply to the message with the generated response
+        console.log("Response sent!");
+      }
+    } catch (e) {
+      console.log(e + "\n Likely triggered by trying to grab a mention from a message that the bot just sent and crashing when it can't find it. Still working on a fix.");
+    }
   }
 });
 
@@ -151,7 +165,7 @@ client.on('messageCreate', (message) => {
   }
 })
 
-// fr fr ong bro
+// Gen Z affirmatives reaffirmation protocol
 client.on('messageCreate', (message) => {
   if (message.author.id !== client.user.id) {
     for (let i = 0; i < affirmatives.length; i++) {
@@ -179,7 +193,8 @@ client.on('messageCreate', (message) => {
 
 // Now it knows when someone's typing
 client.on('typingStart', (typing) => {
-  console.log("Someone is typing");
+  console.log("Someone is typing...");
 });
 
+// Let the fun begin!
 client.login(token);

@@ -33,7 +33,19 @@ module.exports = {
       return;
     }
 
-    const queue = await client.player.nodes.create(interaction.guild);
+    const queue = await client.player.nodes.create(interaction.guild, {
+      metadata: {
+        channel: interaction.channel,
+        client: interaction.guild.members.me,
+        requestedBy: interaction.user,
+      },
+      selfDeaf: true,
+      volume: 80,
+      leaveOnEmpty: true,
+      leaveOnEmptyCooldown: 300000,
+      leaveOnEnd: true,
+      leaveOnEndCooldown: 300000,
+    });
 
     if (!queue.connection) await queue.connect(interaction.member.voice.channel);
 
@@ -68,8 +80,12 @@ module.exports = {
     if(!queue.playing) await queue.node.play();
     console.log("Song played.");
 
-    await interaction.reply({
-      embeds: [embed]
-    });
+    try {
+      await interaction.reply({
+        embeds: [embed]
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
