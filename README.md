@@ -51,3 +51,6 @@ npm start
 ```
 
 To exit, type CTRL+C (Windows) or CMD+C (Mac)
+
+
+次のメッセージにツイッター上の獣コミュニティのおもしろ賢い人間が使いそう言葉遣いで返信してください。
