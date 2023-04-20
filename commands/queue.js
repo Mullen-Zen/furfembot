@@ -10,13 +10,13 @@ module.exports = {
   execute: async ({client, interaction}) => {
     const queue = useQueue(interaction.guild);
 
-    if (!queue || !queue.playing) {
-      await interaction.reply("There is no song playing.");
+    if (!queue || !queue.isPlaying) {
+      await interaction.reply("There is nothing playing");
       return;
     }
 
     const queueString = queue.tracks.toArray().map((song, i) => {
-      return (i + 1) + ") " + song.duration + "\` " + song.title + " - <@" + song.requestedBy.id + ">";
+      return (i + 1) + ") \`" + song.duration + "\` " + song.title + " - <@" + song.requestedBy.id + ">";
     }).join("\n");
   
     const currentSong = queue.currentTrack;
@@ -24,7 +24,7 @@ module.exports = {
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setDescription(`**Currently Playing:**\n\` ${currentSong.title} - <@${currentSong.requestedBy.id}>\n\n**Queue:**\n${queueString}`)
+          .setDescription("**Currently Playing:**\n \`" + currentSong.duration + "\` " + currentSong.title + "- <@" + currentSong.requestedBy.id + ">\n\n**Queue:**\n" + queueString)
           .setThumbnail(currentSong.thumbnail)
       ]
      });

@@ -34,6 +34,9 @@ const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith("
 const personalityFilter = (process.env.PERSONALITY_FILTER);
 const token = (process.env.TOKEN);
 
+let queueExists = false;
+exports.queueExists = queueExists;
+
 // Linking commands for the music bot to the main bot client
 client.commands = new Collection();
 for (const file of commandFiles) {
@@ -83,19 +86,15 @@ client.on('interactionCreate', async interaction => {
 // AI Prompting
 client.on('messageCreate', async (message) => {
   if (message.author.id !== client.user.id) {
-    try {
-      let mention = message.mentions.users.first().bot === true;
-      if (mention) {
-        console.log("yay");
-        console.log("Bot-directed message detected:\n" + message.author.toString() + " prompted " + String(message.content.substring(23)) + ".\nResponding now...");
-        const prompt = message.content.substring(23); // Remove the ping from the message
-        const answer = await ask(personalityFilter + prompt); // Prompt the robot, pass through personality filter
-        console.log(answer);
-        message.channel.send(answer); // Reply to the message with the generated response
-        console.log("Response sent!");
-      }
-    } catch (e) {
-      console.log(e + "\n Likely triggered by trying to grab a mention from a message that the bot just sent and crashing when it can't find it. Still working on a fix.");
+    let mention = (message.mentions.users.size > 0) ? message.mentions.users.first().bot === true : false;
+    if (mention) {
+      console.log("yay");
+      console.log("Bot-directed message detected:\n" + message.author.toString() + " prompted " + String(message.content.substring(23)) + ".\nResponding now...");
+      const prompt = message.content.substring(23); // Remove the ping from the message
+      const answer = await ask(personalityFilter + prompt); // Prompt the robot, pass through personality filter
+      console.log(answer);
+      message.channel.send(answer); // Reply to the message with the generated response
+      console.log("Response sent!");
     }
   }
 });
