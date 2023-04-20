@@ -102,20 +102,7 @@ client.on('messageCreate', async (message) => {
 
 // Furry Femboy Programming
 client.on('messageCreate', (message) => {
-  if ((message.content.toLowerCase().includes('men') || message.content.toLowerCase().includes('man')) && (message.author.id !== client.user.id)) {
-    console.log("Men message detected. Responding with something sus now...");
-    const responseCode = getRandomInt(0, 2);
-    switch(responseCode) {
-      case(0):
-        message.channel.send("men?? where are the men??");
-        break;
-      case(1):
-        message.channel.send(message.author.toString() + " Why are you talking about men so much?? You tryina get fucked or sumn?? Damn");
-        break;
-        default:
-    }
-    console.log("Response sent!");
-  } else if ((message.content.toLowerCase().includes('femboy') || message.content.toLowerCase().includes('bussy')) && (message.author.id !== client.user.id)) {
+  if ((message.content.toLowerCase().includes('femboy') || message.content.toLowerCase().includes('bussy')) && (message.author.id !== client.user.id)) {
     console.log("Femboy message detected. Responding with something sus now...")
     const responseCode = getRandomInt(0, 6);
     switch(responseCode) {
