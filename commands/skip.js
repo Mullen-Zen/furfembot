@@ -1,4 +1,3 @@
-// Needs to be tested still!
 const {SlashCommandBuilder} = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
 const { useQueue } = require("discord-player");
