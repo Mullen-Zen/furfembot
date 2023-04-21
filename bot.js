@@ -8,8 +8,10 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v10")
 
 const affirmatives = [
-  "ong",
-  "fr",
+  " ong",
+  "ong ",
+  " fr",
+  "fr ",
   "no cap",
   "bussin",
 ]
@@ -23,7 +25,6 @@ const client = new Client({
   ]
 });
 const commands = [];
-const copypasta = (process.env.COPYPASTA);
 const fs = require("node:fs");
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -127,7 +128,7 @@ client.on('messageCreate', (message) => {
     console.log("Response sent!");
   } else if ((message.content.toLowerCase().includes('furry')) && (message.author.id !== client.user.id)) {
     console.log("Furry message detected. Responding with something sus now...");
-    const responseCode = getRandomInt(0, 5);
+    const responseCode = getRandomInt(0, 4);
     switch(responseCode) {
       case(0):
         message.channel.send(message.author.toString() + " is like actually a furry, btw");
@@ -140,10 +141,6 @@ client.on('messageCreate', (message) => {
         break;
       case(3):
         message.channel.send("??");
-        break;
-      case(4):
-        console.log("Imma make this one really cringe :3");
-        message.channel.send(copypasta);
         break;
       default:
     }

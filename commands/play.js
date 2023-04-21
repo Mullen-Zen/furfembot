@@ -36,11 +36,11 @@ module.exports = {
           client: interaction.guild.members.me,
           requestedBy: interaction.user,
         },
-        selfDeaf: false,
+        selfDeaf: true,
         volume: 80,
-        leaveOnEmpty: false,
+        leaveOnEmpty: true,
         leaveOnEmptyCooldown: 300000,
-        leaveOnEnd: false,
+        leaveOnEnd: true,
         leaveOnEndCooldown: 300000,
       });
       queueExists = true;

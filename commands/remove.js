@@ -21,16 +21,21 @@ module.exports = {
       return;
     }
 
-    const position = interaction.options.getString("position") - 1;
-    const removedTrack = queue.tracks.data[position];
-    queue.removeTrack(position);
+    try {
+      const position = interaction.options.getString("position") - 1;
+      const removedTrack = queue.tracks.data[position];
+      queue.removeTrack(position);
 
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setDescription("Removed **" + removedTrack.title + "** from the queue.")
-          .setThumbnail(removedTrack.thumbnail)
-      ]
-    })
+      await interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setDescription("Removed **" + removedTrack.title + "** from the queue.")
+            .setThumbnail(removedTrack.thumbnail)
+        ]
+      })
+    } catch (e) {
+      console.log("I think someone tried to remove a song in a nonexistant position in the queue.");
+      await interaction.reply("You can\'t remove a track from a position that doesn't exist in the queue!");
+    }
   }
 }
