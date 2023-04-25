@@ -122,7 +122,8 @@ client.on('messageCreate', (message) => {
         message.channel.send(message.author.toString() + " wasn't lying tho that bussy can SQUIRT");
         break;
       case(5):
-        message.channel.send("I'm a certified bussy enjoyer and " + message.author.toString() + " can confirm it")
+        message.channel.send("I'm a certified bussy enjoyer and " + message.author.toString() + " can confirm it");
+        break;
       default:
     }
     console.log("Response sent!");

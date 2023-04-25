@@ -37,7 +37,7 @@ module.exports = {
           requestedBy: interaction.user,
         },
         selfDeaf: true,
-        volume: 80,
+        volume: 50,
         leaveOnEmpty: true,
         leaveOnEmptyCooldown: 300000,
         leaveOnEnd: true,
