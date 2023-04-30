@@ -1,7 +1,7 @@
 // In bot.js
 require('dotenv').config();
 
-const { ask } = require("./ai.js");
+const { ask, GPT35Turbo } = require("./ai.js");
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { Player } = require("discord-player");
 const { REST } = require("@discordjs/rest");
@@ -92,10 +92,14 @@ client.on('messageCreate', async (message) => {
       console.log("yay");
       console.log("Bot-directed message detected:\n" + message.author.toString() + " prompted " + String(message.content.substring(23)) + ".\nResponding now...");
       const prompt = message.content.substring(23); // Remove the ping from the message
-      const answer = await ask(personalityFilter + prompt); // Prompt the robot, pass through personality filter
-      console.log(answer);
-      message.channel.send(answer); // Reply to the message with the generated response
-      console.log("Response sent!");
+      try {
+        const answer = await GPT35Turbo(personalityFilter + prompt); // Prompt the robot, pass through personality filter
+        console.log(answer);
+        message.channel.send(answer); // Reply to the message with the generated response
+        console.log("Response sent!");
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 });

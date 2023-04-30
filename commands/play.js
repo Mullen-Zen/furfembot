@@ -77,16 +77,17 @@ module.exports = {
 
     const song = result.tracks[0];
     await queue.insertTrack(song, queue.tracks.size);
+    await interaction.reply("ok bozo");
 
-    try {
-      embed
-      .setDescription("Now queueing **" + song.title + " (" + song.url + ")**.")
-      .setThumbnail(song.thumbnail)
-      .setFooter({text: "Duration: " + song.duration});
-      await interaction.reply({ embeds: [embed] });
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   embed
+    //   .setDescription("Now queueing **" + song.title + " (" + song.url + ")**.")
+    //   .setThumbnail(song.thumbnail)
+    //   .setFooter({text: "Duration: " + song.duration});
+    //   await interaction.reply({ embeds: [embed] });
+    // } catch (e) {
+    //   console.log(e);
+    // }
 
     if(!queue.isPlaying()) await queue.node.play();
     console.log("Song played.");
